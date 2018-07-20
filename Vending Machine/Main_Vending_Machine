@@ -1,0 +1,270 @@
+library IEEE;
+use IEEE.std_logic_1164.all;
+use IEEE.std_logic_unsigned.all;
+
+--Money is entered **sequentially** NOT ALL AT ONE GO
+
+--Money is represneted in quantities of 250L.L
+--By defualt the machine(bank) has 26x500L.L and 24x250L.L
+
+--idle state = defualt = enter money state
+
+--Machine will not accept more than 5,000 L.L. in total (error = ExceedAllowedAmount)
+--user_bank is the money entered by user
+
+--If cost exceeds money entered (user_bank) stay in Select State, output problem
+--WE CAN NOT RETURN 1000L.L or 5000L.L (Paper Bills)
+
+--Secondary goals:
+--✓ Inventory tracking, default quantity is 10 of each item
+
+
+--optimization/minimization ideas:
+--use nested IF statements
+--turn repetitive code to functions (mainly the inventory/selection bit)
+
+
+--NOTES:
+--1) We can figure out the combination of input (250,500 etc.) by
+--checking how much the amount is increasing each time money is added.
+
+--2) In IDLE state Error is set to NoError
+
+--3)By default the machine(bank) has 26x500L.L and 24x250L.L
+
+entity Vending_Machine is
+  port (
+--clock signal
+  CLK: in std_logic;
+--CashInput from the user, check NOTE1
+  CashInput: in std_logic_vector(5 downto 0);
+--SelectNo represents the number of the item to be selected
+  ItemNo: in integer range 101 to 610;
+--UserAction determines what action to take next
+  UserAction: in std_logic_vector(2 downto 0);
+--ErrorOut displays the error to the user
+  ErrorOut: out std_logic_vector(2 downto 0);
+--Dispense indicates that an item was dispensed
+  Dispense: out std_logic
+  );
+end Vending_Machine;
+
+
+architecture Vending_Machine_arch of Vending_Machine is
+
+  TYPE states IS (IDLE, SelectItem, CollectItem);--IDLE is the default value
+  TYPE errors IS (ExceedAllowedAmount, WrongInput, NoItem, NotEnoughCash, NoChange, NoError);--NoError is the default value
+  TYPE actions IS (Abort, Neglect, Extra, Change, NoAction); --NoAction is the default value
+  --Possible Actions
+  --Abort: CANCELS EVERYTHING AND RETURNS MONEY TO USER
+  --NEGLECT: KEEPS CHANGE
+  --EXTRA: CHOOSES ANOTHER ITEM
+  --CHANGE: ASKS TO RETURN CHANGE
+
+--define our signals here
+signal C_STATE, N_STATE: states := IDLE; --we use to move between states
+signal ACTION : actions := NoAction; --Defines the action to take next
+signal ErrorOutS : errors := NoError; --Defines the erro we have
+
+
+
+--define functions here
+--fucntion to check if Change is available
+function checkChange (A: std_logic_vector(5 downto 0)) return bit is
+begin
+while (A > "000000" AND bank_500 > "000000")
+A - "000010";
+end loop;
+
+while (A > "000000" AND bank_250 > "000000")
+A - "000001";
+end loop;
+
+if A = "000000" then
+  return '1';
+else
+  return '0';
+end if;
+
+end checkChange;
+
+--function to Select item and
+function selected(ItemVar,ItemPr) is
+   if ItemVar > 0 then --item is available
+     if user_bank >= ItemPr then --there is enough money to purchase it
+         ItemVar := ItemVar - 1;
+         user_bank := user_bank - ItemPr;
+
+         ErrorOutS <= NoError; --we do this to resolve any previous error
+     else
+         ErrorOutS <= NotEnoughCash;
+     end if;
+   else
+       ErrorOutS <= NoItem;
+ end if;
+end selected;
+
+
+
+
+  begin
+--process sensitive to clock to update state
+SEQ: process (CLK) -- sensitive on clock
+  begin
+    if CLK'event AND CLK = '1' then
+      C_STATE <= N_STATE;
+    end if;
+  end process SEQ;
+
+
+--combinational logic
+COMB: process (C_STATE, ACTION, CashInput, ItemNo) -- sensitive on to INPUTs and StateChanges
+--declare our variables here:
+--check NOTE3
+variable bank_250 : std_logic_vector(5 downto 0) := "011000" ; --start with 24 250L.L
+variable bank_500 : std_logic_vector(5 downto 0) := "011010" ; --start with 26 500L.L
+variable bank_1000: std_logic_vector(5 downto 0) := "000000" ;
+variable bank_5000: std_logic_vector(5 downto 0) := "000000" ;
+--the money entered by the user
+variable user_bank: std_logic_vector(5 downto 0) := "000000" ;
+
+--The quantity of each item, all default to 10.
+variable I11,I12,I13,I14,I15,I16,
+         T21,I22,I23,I24,I25,I26,
+         I31,I32,I33,I34,I35,I36,
+         I41,I42,I43,I44,I45,I46,I47,I48,I49,I40,I411,I412,
+         I51,I52,I53,I54,I55,I56,I57,I58,I59,I50,
+         I61,I62,I63,I64,I65,I66,I67,I68,I69,I60
+         : integer range 0 to 10 := 10;
+
+
+--declare temporary variables to user
+--variable temp1: std_logic_vector(5 downto 0) := "000000"; --this variable will help us make sure the CashInput is not more than 5,000l.l.
+
+
+  begin
+
+case C_STATE is
+
+  when IDLE =>
+  ErrorOutS <= NoError;
+  Dispense <= '0';
+ --If money has been inputted move to next stage
+  if CashInput /= "000000" then
+    N_STATE <= SelectItem;
+  end if;
+
+--Check to see what the 'combination' of money is, check NOTE1
+  if CashInput = "000001" then
+    bank_250 := bank_250 + "000001";
+    user_bank := user_bank + CashInput;
+  elsif CashInput = "000010" then
+    bank_500 := bank_500 + "000001";
+    user_bank := user_bank + CashInput;
+  elsif CashInput = "000100" then
+    bank_1000 := bank_1000 + "000001";
+    user_bank := user_bank + CashInput;
+  elsif CashInput = "010100" then
+    bank_5000 := bank_5000 + "000001";
+    user_bank := user_bank + CashInput;
+  end if;
+
+
+  when SelectItem =>
+
+ --Incase the user is still adding money
+ --Check to see what the 'combination' of money is, check NOTE1
+if ((user_bank + CashInput) <= "010100") AND (CashInput /= "000000")  then  --we also need to make sure the amount doesn't exceed 5,000 L.L
+  --only add more money if input did not exceed 5000L.L
+   if CashInput = "000001" then
+     bank_250 := bank_250 + "000001";
+     user_bank := user_bank + CashInput;
+   elsif CashInput = "000010" then
+     bank_500 := bank_500 + "000001";
+     user_bank := user_bank + CashInput;
+   elsif CashInput = "000100" then
+     bank_1000 := bank_1000 + "000001";
+     user_bank := user_bank + CashInput;
+   end if;
+   ErrorOutS <= NoError;
+else
+
+  ErrorOutS <= ExceedAllowedAmount; --reject any more added money
+
+end if;
+
+--check for the item selected--
+
+--code format for CASE:
+
+-- when *item code* =>
+--    if *item_variable* > 0 then --item is available
+--      if user_bank >= *item_price* then --there is enough money to purchase it
+--          *item_variable* := *item_variable* - 1;
+--          user_bank := user_bank - *item_price*;
+--
+--          ErrorOutS <= NoError; --we do this to resolve any previous error
+--      else
+--          ErrorOutS <= NotEnoughCash;
+--      end if;
+--    else
+--        ErrorOutS <= NoItem;
+--  end if;
+
+case ItemNo is
+    when 101 =>
+        if I11 > 0 then
+          I11 := I11 - 1;
+          user_bank := user_bank - "000010";
+        else
+          ErrorOutS <= NoItem;
+        end if;
+
+    when 102 =>
+        if I12 > 0 then
+          I12 := I12 - 1;
+          user_bank := user_bank - "000010";
+        else
+          ErrorOutS <= NoItem;
+        end if;
+
+    when others => --put a wrong number
+    ErrorOutS <= WrongInput;
+
+    end case;
+
+
+
+  --when CollectItem =>
+
+
+
+    when others => --incase of unexpected error
+    -- return to IDLE state
+    N_STATE <= IDLE;
+
+
+end case;
+
+
+
+--By the end of the process we output the error
+if ErrorOutS = NoError then
+ErrorOut <= "000";
+elsif ErrorOutS = ExceedAllowedAmount then
+ErrorOut <= "001";
+elsif ErrorOutS = WrongInput then
+ErrorOut <= "010";
+elsif ErrorOutS = NotEnoughCash then
+ErrorOut <= "011";
+elsif ErrorOutS = NoChange then
+ErrorOut <= "100";
+elsif ErrorOutS = NoItem then
+ErrorOut <= "101";
+else --none of the above errors
+ErrorOut <= "111";
+end if;
+
+  end process COMB;
+
+ end Vending_Machine_arch;
