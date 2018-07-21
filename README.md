@@ -1,4 +1,5 @@
-#Vending Machine
+# Vending Machine
+
 Vending machine controller designed in VHDL
 This was also done for a course project I enjoyed a little too much...
 
