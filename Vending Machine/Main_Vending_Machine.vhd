@@ -311,6 +311,8 @@ end if;
 --check for the item selected--
 case ItemNo is
     when 100 => --nothing selected yet, nothing selected
+    --FROMAT: when *item code* => ErrorOutS <= selected(*item var*,*item price*); if ErrorOutS = NoError then ErrorOutS <= purchase(*item var*,"*item price*); *item var* := *item var* - 1; end if;
+
     when 101 => ErrorOutS <= selected(I11,"000100"); if ErrorOutS = NoError then ErrorOutS <= purchase(I11,"000010"); I11 := I11 - 1; end if;
     when 102 => ErrorOutS <= selected(I12,"000100"); if ErrorOutS = NoError then ErrorOutS <= purchase(I12,"000100"); I12 := I12 - 1; end if;
     when 103 => ErrorOutS <= selected(I13,"000100"); if ErrorOutS = NoError then ErrorOutS <= purchase(I13,"000100"); I13 := I13 - 1; end if;
@@ -332,18 +334,40 @@ case ItemNo is
     when 305 => ErrorOutS <= selected(I35,"000110"); if ErrorOutS = NoError then ErrorOutS <= purchase(I35,"000110"); I35 := I35 - 1; end if;
     when 306 => ErrorOutS <= selected(I36,"000100"); if ErrorOutS = NoError then ErrorOutS <= purchase(I36,"000100"); I36 := I36 - 1; end if;
 
-    when 401 => ErrorOutS <= selected(I41,"000110"); if ErrorOutS = NoError then ErrorOutS <= purchase(I41,"000010"); I41 := I41 - 1; end if;
-    when 402 => ErrorOutS <= selected(I42,"000110"); if ErrorOutS = NoError then ErrorOutS <= purchase(I42,"000010"); I42 := I42 - 1; end if;
-    when 403 => ErrorOutS <= selected(I43,"000110"); if ErrorOutS = NoError then ErrorOutS <= purchase(I43,"000010"); I43 := I43 - 1; end if;
-    when 404 => ErrorOutS <= selected(I44,"000110"); if ErrorOutS = NoError then ErrorOutS <= purchase(I44,"000010"); I44 := I44 - 1; end if;
-    when 405 => ErrorOutS <= selected(I45,"001000"); if ErrorOutS = NoError then ErrorOutS <= purchase(I45,"000010"); I45 := I45 - 1; end if;
-    when 406 => ErrorOutS <= selected(I46,"001000"); if ErrorOutS = NoError then ErrorOutS <= purchase(I46,"000010"); I46 := I46 - 1; end if;
-    when 407 => ErrorOutS <= selected(I47,"000110"); if ErrorOutS = NoError then ErrorOutS <= purchase(I44,"000010"); I44 := I44 - 1; end if;
-    when 408 => ErrorOutS <= selected(I48,"001000"); if ErrorOutS = NoError then ErrorOutS <= purchase(I45,"000010"); I45 := I45 - 1; end if;
-    when 409 => ErrorOutS <= selected(I49,"001000"); if ErrorOutS = NoError then ErrorOutS <= purchase(I46,"000010"); I46 := I46 - 1; end if;
-    when 410 => ErrorOutS <= selected(I40,"000110"); if ErrorOutS = NoError then ErrorOutS <= purchase(I44,"000010"); I44 := I44 - 1; end if;
-    when 411 => ErrorOutS <= selected(I411,"001000"); if ErrorOutS = NoError then ErrorOutS <= purchase(I45,"000010"); I45 := I45 - 1; end if;
-    when 412 => ErrorOutS <= selected(I412,"001000"); if ErrorOutS = NoError then ErrorOutS <= purchase(I46,"000010"); I46 := I46 - 1; end if;
+    when 401 => ErrorOutS <= selected(I41,"000110"); if ErrorOutS = NoError then ErrorOutS <= purchase(I41,"000110"); I41 := I41 - 1; end if;
+    when 402 => ErrorOutS <= selected(I42,"000110"); if ErrorOutS = NoError then ErrorOutS <= purchase(I42,"000110"); I42 := I42 - 1; end if;
+    when 403 => ErrorOutS <= selected(I43,"000110"); if ErrorOutS = NoError then ErrorOutS <= purchase(I43,"000110"); I43 := I43 - 1; end if;
+    when 404 => ErrorOutS <= selected(I44,"000110"); if ErrorOutS = NoError then ErrorOutS <= purchase(I44,"000110"); I44 := I44 - 1; end if;
+    when 405 => ErrorOutS <= selected(I45,"001000"); if ErrorOutS = NoError then ErrorOutS <= purchase(I45,"001000"); I45 := I45 - 1; end if;
+    when 406 => ErrorOutS <= selected(I46,"001000"); if ErrorOutS = NoError then ErrorOutS <= purchase(I46,"001000"); I46 := I46 - 1; end if;
+    when 407 => ErrorOutS <= selected(I47,"000100"); if ErrorOutS = NoError then ErrorOutS <= purchase(I47,"000100"); I47 := I47 - 1; end if;
+    when 408 => ErrorOutS <= selected(I48,"000010"); if ErrorOutS = NoError then ErrorOutS <= purchase(I48,"000010"); I48 := I48 - 1; end if;
+    when 409 => ErrorOutS <= selected(I49,"000100"); if ErrorOutS = NoError then ErrorOutS <= purchase(I48,"000100"); I49 := I49 - 1; end if;
+    when 410 => ErrorOutS <= selected(I40,"000100"); if ErrorOutS = NoError then ErrorOutS <= purchase(I40,"000100"); I40 := I40 - 1; end if;
+    when 411 => ErrorOutS <= selected(I411,"000010"); if ErrorOutS = NoError then ErrorOutS <= purchase(I411,"000010"); I411 := I411 - 1; end if;
+    when 412 => ErrorOutS <= selected(I412,"000010"); if ErrorOutS = NoError then ErrorOutS <= purchase(I412,"000010"); I412 := I412 - 1; end if;
+
+    when 501 => ErrorOutS <= selected(I51,"000110"); if ErrorOutS = NoError then ErrorOutS <= purchase(I51,"000110"); I51 := I51 - 1; end if;
+    when 502 => ErrorOutS <= selected(I52,"000110"); if ErrorOutS = NoError then ErrorOutS <= purchase(I52,"000110"); I52 := I52 - 1; end if;
+    when 503 => ErrorOutS <= selected(I53,"000110"); if ErrorOutS = NoError then ErrorOutS <= purchase(I53,"000110"); I53 := I53 - 1; end if;
+    when 504 => ErrorOutS <= selected(I54,"000110"); if ErrorOutS = NoError then ErrorOutS <= purchase(I54,"000110"); I54 := I54 - 1; end if;
+    when 505 => ErrorOutS <= selected(I55,"001000"); if ErrorOutS = NoError then ErrorOutS <= purchase(I55,"001000"); I55 := I55 - 1; end if;
+    when 506 => ErrorOutS <= selected(I56,"001000"); if ErrorOutS = NoError then ErrorOutS <= purchase(I56,"001000"); I56 := I56 - 1; end if;
+    when 507 => ErrorOutS <= selected(I57,"001000"); if ErrorOutS = NoError then ErrorOutS <= purchase(I57,"001000"); I57 := I57 - 1; end if;
+    when 508 => ErrorOutS <= selected(I58,"001100"); if ErrorOutS = NoError then ErrorOutS <= purchase(I58,"001100"); I58 := I58 - 1; end if;
+    when 509 => ErrorOutS <= selected(I59,"001100"); if ErrorOutS = NoError then ErrorOutS <= purchase(I59,"001100"); I59 := I59 - 1; end if;
+    when 510 => ErrorOutS <= selected(I50,"001110"); if ErrorOutS = NoError then ErrorOutS <= purchase(I50,"001110"); I50 := I50 - 1; end if;
+
+    when 601 => ErrorOutS <= selected(I61,"000100"); if ErrorOutS = NoError then ErrorOutS <= purchase(I61,"000100"); I61 := I61 - 1; end if;
+    when 602 => ErrorOutS <= selected(I62,"000100"); if ErrorOutS = NoError then ErrorOutS <= purchase(I62,"000100"); I62 := I62 - 1; end if;
+    when 603 => ErrorOutS <= selected(I63,"000100"); if ErrorOutS = NoError then ErrorOutS <= purchase(I63,"000100"); I63 := I63 - 1; end if;
+    when 604 => ErrorOutS <= selected(I64,"000100"); if ErrorOutS = NoError then ErrorOutS <= purchase(I64,"000100"); I64 := I64 - 1; end if;
+    when 605 => ErrorOutS <= selected(I56,"000100"); if ErrorOutS = NoError then ErrorOutS <= purchase(I56,"000100"); I56 := I56 - 1; end if;
+    when 606 => ErrorOutS <= selected(I66,"000100"); if ErrorOutS = NoError then ErrorOutS <= purchase(I66,"000100"); I66 := I66 - 1; end if;
+    when 607 => ErrorOutS <= selected(I67,"000100"); if ErrorOutS = NoError then ErrorOutS <= purchase(I67,"000100"); I67 := I67 - 1; end if;
+    when 608 => ErrorOutS <= selected(I68,"000100"); if ErrorOutS = NoError then ErrorOutS <= purchase(I68,"000100"); I68 := I68 - 1; end if;
+    when 609 => ErrorOutS <= selected(I69,"000100"); if ErrorOutS = NoError then ErrorOutS <= purchase(I69,"000100"); I69 := I69 - 1; end if;
+    when 610 => ErrorOutS <= selected(I60,"000100"); if ErrorOutS = NoError then ErrorOutS <= purchase(I60,"000100"); I60 := I60 - 1; end if;
 
 
     when others => ErrorOutS <= WrongInput; --put a wrong number
@@ -351,15 +375,12 @@ case ItemNo is
     end case;
 
 
-
-  when others => --incase of unexpected error
+  when others => --incase of unexpected state
     -- return to IDLE state
     N_STATE <= IDLE;
 
 
 end case;
-
-
 
 --By the end of the process we output the error
 if ErrorOutS = NoError then
