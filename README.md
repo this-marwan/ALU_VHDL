@@ -3,8 +3,6 @@
 Vending machine controller designed in VHDL
 This was also done for a course project I enjoyed a little too much...
 
-**Not Complete Yet**
-
 The goal was to design a vending machine controller with the following instruction set and specs:
 <p align= "center">
   <img src="https://github.com/this-marwan/ALU_VHDL/blob/master/assignmentB_1.PNG?raw=true" alt="assignment pic"/>
